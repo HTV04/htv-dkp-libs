@@ -1,0 +1,28 @@
+# Maintainer: HTV04
+
+pkgname=libogc-mod
+pkgver=2.3.1.r135.g6772c69
+pkgrel=1
+pkgdesc="Nintendo Gamecube and Wii library."
+arch=('any')
+url="http://github.com/HTV04/${pkgname}"
+license=('custom')
+groups=('wii-dev' 'gamecube-dev')
+makedepends=('devkitPPC')
+options=(!strip libtool staticlibs)
+source=(git+${url}.git)
+md5sums=('SKIP')
+
+pkgver() {
+  cd "${pkgname}"
+
+  git describe --long --tags | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g'
+}
+
+build() {
+  make -C "${srcdir}/${pkgname}"
+}
+
+package() {
+  make -C "${srcdir}/${pkgname}" DESTDIR="${pkgdir}" install
+}
