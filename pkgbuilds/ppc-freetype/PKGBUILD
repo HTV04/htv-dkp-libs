@@ -1,0 +1,53 @@
+# Maintainer: HTV04
+# Contributor: Dave Murphy <davem@devkitpro.org>
+
+pkgname=ppc-freetype
+pkgver=2.12.1
+pkgrel=1
+pkgdesc='FreeType is a freely available software library to render fonts.'
+arch=('any')
+url='https://www.freetype.org/'
+license=(GPL2+ custom:FreeType)
+options=(!strip libtool staticlibs)
+groups=('ppc-portlibs')
+depends=("ppc-bzip2"
+         "ppc-libpng"
+         "ppc-zlib"
+)
+makedepends=('ppc-pkg-config' 'dkp-toolchain-vars')
+source=("http://download.savannah.gnu.org/releases/freetype/freetype-$pkgver.tar.gz")
+sha256sums=('efe71fd4b8246f1b0b1b9bfca13cfff1c9ad85930340c27df469733bbb620938')
+
+build() {
+  cd freetype-$pkgver
+
+  source /opt/devkitpro/ppcvars.sh
+
+  ./configure --prefix="${PORTLIBS_PREFIX}" --host=powerpc-eabi \
+    --enable-freetype-config \
+    --disable-shared --enable-static \
+    --with-zlib \
+    --with-bzip2 \
+    --with-png
+
+  make
+}
+
+package() {
+  cd freetype-$pkgver
+
+  source /opt/devkitpro/ppcvars.sh
+
+  make DESTDIR="$pkgdir" install
+
+  # patch the config script to always output static libraries when not relying on pkg-config
+  sed 's/\$show_static/yes/' -i "${pkgdir}/${PORTLIBS_PREFIX}/bin/freetype-config"
+
+  # Licenses
+  install -Dm644 "LICENSE.TXT" "${pkgdir}/${PORTLIBS_PREFIX}/licenses/${pkgname}/LICENSE.TXT"
+  install -Dm644 "docs/GPLv2.TXT"   "${pkgdir}/${PORTLIBS_PREFIX}/licenses/${pkgname}/GPLv2.TXT"
+  install -Dm644 "docs/FTL.TXT"     "${pkgdir}/${PORTLIBS_PREFIX}/licenses/${pkgname}/FTL.TXT"
+
+  # remove useless stuff
+  rm -r "${pkgdir}/${PORTLIBS_PREFIX}/share"
+}

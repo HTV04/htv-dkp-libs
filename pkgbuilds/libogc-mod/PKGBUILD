@@ -11,7 +11,7 @@ groups=('wii-dev' 'gamecube-dev')
 makedepends=('devkitPPC')
 options=(!strip libtool staticlibs)
 source=(git+${url}.git)
-md5sums=('SKIP')
+sha256sums=('SKIP')
 
 pkgver() {
   cd "${pkgname}"
