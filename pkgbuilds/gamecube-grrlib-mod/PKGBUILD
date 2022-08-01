@@ -1,0 +1,37 @@
+# Maintainer: HTV04
+
+_reponame=GRRLIB-mod
+
+pkgname=gamecube-grrlib-mod
+pkgver=4.4.1.r45.g132f577
+pkgrel=1
+pkgdesc="A C/C++ 2D/3D graphics library for GameCube application developers"
+arch=('any')
+url="https://github.com/HTV04/${_reponame}"
+license=("MIT")
+depends=('libogc-mod' 'libfat-mod-ogc' 'ppc-libpngu-mod' 'ppc-libpng' 'ppc-libjpeg-turbo' 'ppc-freetype')
+makedepends=('devkitPPC')
+options=('!strip' 'libtool' 'staticlibs')
+source=("git+${url}.git")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "${_reponame}"
+
+  git describe --long | sed "s/^v//;s/\([^-]*-g\)/r\1/;s/-/./g"
+}
+
+build() {
+  cd "${_reponame}"
+
+  make -C src PLATFORM=cube
+}
+
+package() {
+  cd "${_reponame}"
+
+  # Install license
+  install -Dm0644 LICENSE "${pkgdir}/opt/devkitpro/portlibs/gamecube/licenses/${pkgname}/LICENSE"
+
+  make -C src DESTDIR="${pkgdir}" PLATFORM=cube install
+}

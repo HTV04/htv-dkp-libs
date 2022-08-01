@@ -1,15 +1,15 @@
 # Maintainer: HTV04
 
-_reponame=libpngu-mod
+_reponame=GRRLIB-mod
 
-pkgname=ppc-${_reponame}
-pkgver=r6.3e9b58e
+pkgname=wii-grrlib-mod
+pkgver=4.4.1.r45.g132f577
 pkgrel=1
 pkgdesc="A C/C++ 2D/3D graphics library for Wii application developers"
 arch=('any')
 url="https://github.com/HTV04/${_reponame}"
 license=("MIT")
-depends=('ppc-libpng')
+depends=('libogc-mod' 'libfat-mod-ogc' 'ppc-libpngu-mod' 'ppc-libpng' 'ppc-libjpeg-turbo' 'ppc-freetype')
 makedepends=('devkitPPC')
 options=('!strip' 'libtool' 'staticlibs')
 source=("git+${url}.git")
@@ -18,7 +18,7 @@ sha256sums=('SKIP')
 pkgver() {
   cd "${_reponame}"
 
-  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+  git describe --long | sed "s/^v//;s/\([^-]*-g\)/r\1/;s/-/./g"
 }
 
 build() {
@@ -31,7 +31,7 @@ package() {
   cd "${_reponame}"
 
   # Install license
-  install -Dm0644 LICENSE "${pkgdir}/opt/devkitpro/portlibs/ppc/licenses/${pkgname}/LICENSE"
+  install -Dm0644 LICENSE "${pkgdir}/opt/devkitpro/portlibs/wii/licenses/${pkgname}/LICENSE"
 
   make -C src DESTDIR="${pkgdir}" install
 }
