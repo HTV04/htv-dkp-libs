@@ -1,0 +1,36 @@
+# Maintainer: HTV04
+# Contributor:  Dave Murphy <davem@devkitpro.org>
+# Contributor: Crayon <crayon1@rocketmail.com>
+
+pkgname=ppc-jansson
+pkgver=2.14
+pkgrel=1
+pkgdesc='A C library for encoding, decoding and manipulating JSON data.'
+arch=('any')
+url='http://www.digip.org/jansson/'
+license=('custom')
+options=(!strip libtool staticlibs)
+makedepends=('dkp-toolchain-vars')
+source=("https://github.com/akheron/jansson/releases/download/v$pkgver/jansson-$pkgver.tar.gz")
+sha256sums=('5798d010e41cf8d76b66236cfb2f2543c8d082181d16bc3085ab49538d4b9929')
+groups=('ppc-portlibs')
+
+build() {
+  cd jansson-$pkgver
+
+  source /opt/devkitpro/ppcvars.sh
+
+  ./configure --prefix="${PORTLIBS_PREFIX}" --host=powerpc-eabi \
+    --disable-shared --enable-static
+  make
+}
+
+package() {
+  cd jansson-$pkgver
+
+  source /opt/devkitpro/ppcvars.sh
+
+  make DESTDIR="$pkgdir" install
+  # license
+  install -Dm644 LICENSE "$pkgdir"${PORTLIBS_PREFIX}/licenses/$pkgname/LICENSE
+}

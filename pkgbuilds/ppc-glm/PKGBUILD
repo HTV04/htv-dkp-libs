@@ -1,0 +1,40 @@
+# Maintainer: HTV04
+# Contributor: Dave Murphy <davem@devkitpro.org>
+# Contributor: Ash Logan <ash [at] heyquark [dot] com>
+
+pkgname=ppc-glm
+pkgver=0.9.9.5
+pkgrel=1
+pkgdesc='OpenGL Mathematics (GLM) header only C++ library'
+arch=('any')
+url='https://github.com/g-truc/glm'
+license=(MIT)
+options=(!strip libtool staticlibs)
+source=("${url}/releases/download/${pkgver}/glm-${pkgver}.zip")
+sha256sums=('4fe34860ce69156f63eea6c3d84c91cadfc330353cf275ff394aef4e163cafee')
+makedepends=('dkp-toolchain-vars' 'devkitppc-cmake')
+groups=('ppc-portlibs')
+
+build() {
+
+  mkdir -p build
+  cd build
+
+  source $DEVKITPRO/ppcvars.sh
+  powerpc-eabi-cmake \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=$PORTLIBS_PREFIX \
+    -DCMAKE_INSTALL_LIBDIR=lib \
+    -DCMAKE_CXX_FLAGS="$CFLAGS $CPPFLAGS" \
+    -DGLM_TEST_ENABLE=OFF \
+    ../glm
+
+  make
+
+}
+
+package() {
+  cd build
+
+  make install DESTDIR="$pkgdir"
+}

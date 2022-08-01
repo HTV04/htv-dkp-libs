@@ -1,0 +1,37 @@
+# Maintainer: HTV04
+# Contributor: WinterMute <davem@devkitpro.org>
+pkgname=ppc-zlib
+pkgver=1.2.12
+pkgrel=1
+pkgdesc='Deflate compression method library (for Nintendo gamecube/wii homebrew development)'
+arch=('any')
+url='https://zlib.net/'
+license=('zlib')
+options=(!strip libtool staticlibs)
+source=("${url}zlib-$pkgver.tar.xz")
+sha256sums=('7db46b8d7726232a621befaab4a1c870f00a90805511c0e0090441dac57def18')
+makedepends=('dkp-toolchain-vars')
+groups=('ppc-portlibs')
+build() {
+  cd zlib-$pkgver
+
+  source /opt/devkitpro/devkitppc.sh
+  source /opt/devkitpro/ppcvars.sh
+
+  CHOST=powerpc-eabi \
+    ./configure --prefix="/opt/devkitpro/portlibs/ppc" --static
+  make libz.a # only build library, no programs
+}
+
+package() {
+  cd zlib-$pkgver
+
+  source /opt/devkitpro/devkitppc.sh
+
+  make DESTDIR="$pkgdir" install
+  # license
+  install -d "$pkgdir"/opt/devkitpro/portlibs/ppc/licenses/$pkgname
+  tail -n 31 README > "$pkgdir"/opt/devkitpro/portlibs/ppc/licenses/$pkgname/LICENSE
+  # remove useless stuff
+  rm -r "$pkgdir"/opt/devkitpro/portlibs/ppc/share
+}

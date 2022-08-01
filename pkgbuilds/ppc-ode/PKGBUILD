@@ -1,0 +1,36 @@
+# Maintainer: HTV04
+# Contributor: davidgfnet <david@davidgf.net>
+pkgname=ppc-ode
+pkgver=0.16.2
+pkgrel=1
+pkgdesc='High performance library for simulating rigid body dynamics'
+arch=('any')
+url='http://ode.org/'
+license=('BSD')
+options=(!strip libtool staticlibs)
+source=("https://bitbucket.org/odedevs/ode/downloads/ode-${pkgver}.tar.gz")
+makedepends=('dkp-toolchain-vars')
+sha256sums=('b26aebdcb015e2d89720ef48e0cb2e8a3ca77915f89d853893e7cc861f810f22')
+groups=('ppc-portlibs')
+
+build() {
+  cd ode-$pkgver
+
+  source /opt/devkitpro/ppcvars.sh
+
+  # Demos depend on GL and X11, disable since they are not useful to us.
+  # Disable threads since there's no pthread support on Wii/GC
+  ./configure --prefix="${PORTLIBS_PREFIX}" --host=powerpc-eabi \
+              --disable-demos --enable-static --disable-threading-intf
+
+}
+
+package() {
+
+  cd ode-$pkgver
+
+  source /opt/devkitpro/ppcvars.sh
+
+  make install DESTDIR="$pkgdir"
+
+}

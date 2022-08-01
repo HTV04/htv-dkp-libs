@@ -20,12 +20,11 @@ build() {
 
   cd libjpeg-turbo-$pkgver
 
-  cmake -B build \
+  powerpc-eabi-cmake \
+  -B build \
   -DCMAKE_C_FLAGS_RELEASE="" \
   -DENABLE_SHARED=0 \
-  -G "Unix Makefiles" \
-  --install-prefix /opt/devkitpro/portlibs/ppc \
-  --toolchain /opt/devkitpro/cmake/devkitPPC.cmake
+  -G "Unix Makefiles"
 
   make -C build jpeg-static turbojpeg-static
 
