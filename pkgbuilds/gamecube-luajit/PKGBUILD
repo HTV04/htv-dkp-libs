@@ -1,0 +1,34 @@
+# Maintainer: HTV04
+
+_gitname=LuaJIT
+
+pkgname=gamecube-luajit
+pkgver=2.1.0.beta3.r445.g09c8767e
+pkgrel=1
+pkgdesc="Nintendo Gamecube and Wii library."
+arch=('any')
+url="http://github.com/HTV04/${_gitname}"
+license=('custom')
+groups=('gamecube-portlibs')
+makedepends=('devkitPPC' 'dkp-toolchain-vars')
+options=(!strip libtool staticlibs)
+source=(git+${url}.git)
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "${_gitname}"
+
+  git describe --long --tags | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g'
+}
+
+build() {
+  cd "${_gitname}"
+
+  ./build.sh gamecube
+}
+
+package() {
+  cd "${_gitname}"
+
+  ./install.sh gamecube "${pkgdir}"
+}
