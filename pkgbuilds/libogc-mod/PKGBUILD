@@ -8,9 +8,9 @@ arch=('any')
 url="http://github.com/HTV04/${pkgname}"
 license=('custom')
 groups=('wii-dev' 'gamecube-dev')
-makedepends=('devkitPPC')
-options=(!strip libtool staticlibs)
-source=(git+${url}.git)
+makedepends=("devkitPPC")
+options=('!strip' 'libtool' 'staticlibs')
+source=("git+${url}.git")
 sha256sums=('SKIP')
 
 pkgver() {

@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# Add entries
+repo-add htv-dkp-libs.db.tar.gz "$@"
+
 # Remove symlinks
 rm -f htv-dkp-libs.db
 rm -f htv-dkp-libs.files
