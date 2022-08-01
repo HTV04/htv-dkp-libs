@@ -1,0 +1,69 @@
+# Maintainer: HTV04
+# Contributor: WinterMute <davem@devkitpro.org>
+
+pkgname=ppc-libjpeg-turbo
+pkgver=2.1.3
+pkgrel=1
+pkgdesc='libjpeg derivative with accelerated baseline JPEG compression and decompression (for Wii/GameCube homebrew development)'
+arch=('any')
+url='https://sourceforge.net/projects/libjpeg-turbo'
+license=('custom')
+options=(!strip libtool staticlibs)
+source=("https://sourceforge.net/projects/libjpeg-turbo/files/$pkgver/libjpeg-turbo-$pkgver.tar.gz")
+sha256sums=('467b310903832b033fe56cd37720d1b73a6a3bd0171dbf6ff0b620385f4f76d0')
+makedepends=('ppc-pkg-config' 'dkp-toolchain-vars' 'devkitPPC')
+groups=('ppc-portlibs')
+
+build() {
+
+  source /opt/devkitpro/ppcvars.sh
+
+  cd libjpeg-turbo-$pkgver
+
+  cmake -B build \
+  -DCMAKE_C_FLAGS_RELEASE="" \
+  -DENABLE_SHARED=0 \
+  -G "Unix Makefiles" \
+  --install-prefix /opt/devkitpro/portlibs/ppc \
+  --toolchain /opt/devkitpro/cmake/devkitPPC.cmake
+
+  make -C build jpeg-static turbojpeg-static
+
+}
+
+package() {
+
+  source /opt/devkitpro/ppcvars.sh
+
+  cd libjpeg-turbo-$pkgver
+
+  # headers
+  install -d "$pkgdir"/opt/devkitpro/portlibs/ppc/include
+  cp -v turbojpeg.h "$pkgdir"/opt/devkitpro/portlibs/ppc/include/
+  cp -v build/jconfig.h "$pkgdir"/opt/devkitpro/portlibs/ppc/include/
+  cp -v jerror.h "$pkgdir"/opt/devkitpro/portlibs/ppc/include/
+  cp -v jmorecfg.h "$pkgdir"/opt/devkitpro/portlibs/ppc/include/
+  cp -v jpeglib.h "$pkgdir"/opt/devkitpro/portlibs/ppc/include/
+
+  # libraries
+  install -d "$pkgdir"/opt/devkitpro/portlibs/ppc/lib
+  cp -v build/libjpeg.a "$pkgdir"/opt/devkitpro/portlibs/ppc/lib/
+  cp -v build/libturbojpeg.a "$pkgdir"/opt/devkitpro/portlibs/ppc/lib/
+
+  # license
+  install -d "$pkgdir"/opt/devkitpro/portlibs/ppc/licenses/$pkgname
+  cp -v LICENSE.md "$pkgdir"/opt/devkitpro/portlibs/ppc/licenses/$pkgname/
+
+  # pkgconfig
+  install -d "$pkgdir"/opt/devkitpro/portlibs/ppc/lib/pkgconfig
+  cp -v build/pkgscripts/libjpeg.pc "$pkgdir"/opt/devkitpro/portlibs/ppc/lib/pkgconfig/
+  cp -v build/pkgscripts/libturbojpeg.pc "$pkgdir"/opt/devkitpro/portlibs/ppc/lib/pkgconfig/
+
+  # cmake
+  install -d "$pkgdir"/opt/devkitpro/portlibs/ppc/lib/cmake/libjpeg-turbo
+  cp -v build/pkgscripts/libjpeg-turboConfig.cmake "$pkgdir"/opt/devkitpro/portlibs/ppc/lib/cmake/libjpeg-turbo/
+  cp -v build/pkgscripts/libjpeg-turboConfigVersion.cmake "$pkgdir"/opt/devkitpro/portlibs/ppc/lib/cmake/libjpeg-turbo/
+  cp -v build/CMakeFiles/Export/lib/cmake/libjpeg-turbo/libjpeg-turboTargets.cmake "$pkgdir"/opt/devkitpro/portlibs/ppc/lib/cmake/libjpeg-turbo/
+  cp -v build/CMakeFiles/Export/lib/cmake/libjpeg-turbo/libjpeg-turboTargets-release.cmake "$pkgdir"/opt/devkitpro/portlibs/ppc/lib/cmake/libjpeg-turbo/
+
+}
