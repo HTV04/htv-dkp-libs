@@ -1,0 +1,24 @@
+# Maintainer: HTV04
+
+_reponame=audiogc
+
+pkgname=wii-${_reponame}
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="A versatile audio engine written in C++ for Wii homebrew."
+arch=('any')
+url="http://github.com/HTV04/${_reponame}"
+license=('MIT')
+groups=('wii-portlibs')
+makedepends=('devkitPPC' 'libogc-mod')
+options=('!strip' 'libtool' 'staticlibs')
+source=("git+${url}.git#tag=v${pkgver}")
+sha256sums=('SKIP')
+
+build() {
+  make -C "${_reponame}"
+}
+
+package() {
+  make -C "${_reponame}" DESTDIR="${pkgdir}" install
+}
