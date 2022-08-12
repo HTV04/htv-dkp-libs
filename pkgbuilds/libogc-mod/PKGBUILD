@@ -1,7 +1,7 @@
 # Maintainer: HTV04
 
 pkgname=libogc-mod
-pkgver=2.3.1.r135.g6772c69
+pkgver=2.3.1.r139.g100ecae
 pkgrel=1
 pkgdesc="Nintendo Gamecube and Wii library."
 arch=('any')

@@ -3,7 +3,7 @@
 _reponame=GRRLIB-mod
 
 pkgname=wii-grrlib-mod
-pkgver=4.4.1.r45.g132f577
+pkgver=4.4.1.r46.g7f5d8b5
 pkgrel=1
 pkgdesc="A C/C++ 2D/3D graphics library for Wii application developers"
 arch=('any')
