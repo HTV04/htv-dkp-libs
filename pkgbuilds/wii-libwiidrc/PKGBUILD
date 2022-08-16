@@ -1,0 +1,44 @@
+# Maintainer: HTV04
+
+_gitname=libwiidrc
+
+pkgname=wii-${_gitname}
+pkgver=1.3.r2.g4e15620
+pkgrel=1
+pkgdesc="Nintendo Gamecube and Wii library."
+arch=('any')
+url="http://github.com/FIX94/${_gitname}"
+license=('MIT')
+groups=('wii-portlibs')
+makedepends=('devkitPPC')
+options=('!strip' 'libtool' 'staticlibs')
+source=("git+${url}.git")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "${_gitname}"
+
+  git describe --long --tags | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g'
+}
+
+build() {
+  cd "${_gitname}"
+
+  # This isn't worked around in the Makefile :P
+  mkdir -p lib
+
+  make
+}
+
+package() {
+  cd "${_gitname}"
+
+  install -d "${pkgdir}"/opt/devkitpro/portlibs/wii/include/wiidrc
+  cp -v include/wiidrc/wiidrc.h "${pkgdir}"/opt/devkitpro/portlibs/wii/include/wiidrc
+
+  install -d "${pkgdir}"/opt/devkitpro/portlibs/wii/lib
+  cp -v lib/libwiidrc.a "${pkgdir}"/opt/devkitpro/portlibs/wii/lib
+  
+  install -d "${pkgdir}"/opt/devkitpro/portlibs/wii/licenses/"${pkgname}"
+  cp -v LICENSE "${pkgdir}"/opt/devkitpro/portlibs/wii/licenses/"${pkgname}"
+}
