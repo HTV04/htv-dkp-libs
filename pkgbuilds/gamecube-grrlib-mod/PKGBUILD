@@ -4,7 +4,7 @@ _reponame=GRRLIB-mod
 
 pkgname=gamecube-grrlib-mod
 pkgver=4.4.1.r46.g7f5d8b5
-pkgrel=1
+pkgrel=2
 pkgdesc="A C/C++ 2D/3D graphics library for GameCube application developers"
 arch=('any')
 url="https://github.com/HTV04/${_reponame}"
@@ -24,7 +24,7 @@ pkgver() {
 build() {
   cd "${_reponame}"
 
-  make -C src PLATFORM=cube
+  make -C src GRRLIB_PLATFORM=cube
 }
 
 package() {
@@ -33,5 +33,5 @@ package() {
   # Install license
   install -Dm0644 LICENSE "${pkgdir}/opt/devkitpro/portlibs/gamecube/licenses/${pkgname}/LICENSE"
 
-  make -C src DESTDIR="${pkgdir}" PLATFORM=cube install
+  make -C src DESTDIR="${pkgdir}" GRRLIB_PLATFORM=cube install
 }

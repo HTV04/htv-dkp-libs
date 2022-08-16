@@ -25,7 +25,7 @@ build() {
   cd "${_gitname}"
 
   # This isn't worked around in the Makefile :P
-  mkdir -p lib
+  mkdir lib
 
   make
 }
