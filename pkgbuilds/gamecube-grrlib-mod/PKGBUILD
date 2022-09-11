@@ -3,8 +3,8 @@
 _reponame=GRRLIB-mod
 
 pkgname=gamecube-grrlib-mod
-pkgver=4.4.1.r46.g7f5d8b5
-pkgrel=2
+pkgver=4.4.1.r52.ge0a5a37
+pkgrel=1
 pkgdesc="A C/C++ 2D/3D graphics library for GameCube application developers"
 arch=('any')
 url="https://github.com/HTV04/${_reponame}"
